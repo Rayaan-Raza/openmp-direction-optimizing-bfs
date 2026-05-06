@@ -1,0 +1,35 @@
+=== Graph: soc-Epinions1 ===
+  Vertices:  75888
+  Edges:     508837 (directed)
+  Avg degree: 6.7051
+  Min degree: 0
+  Max degree: 1801
+
+Running BFS mode: hybrid_omp | source=0 | threads=4
+  alpha=10 beta=48
+--- Run Metrics ---
+  Runtime:              0.001681 s
+  CPU time:             0.004114 s
+  Visited:              47676
+  Levels:               10
+  Edge examinations:    152192
+  Top-down levels:      6
+  Bottom-up levels:     4
+  Switch to BU at lvl:  2
+  Frontier at switch:   3634
+  Visited frac at sw:   0.0497
+  Switch back TD lvl:   6
+--- Per-Level Metrics ---
+ Level    Frontier         EdgeExams  NewVisited        Mode
+     0           1               139         139    top_down
+     1         139             17453        3634    top_down
+     2        3634             80798       19226   bottom_up
+     3       19226             34124       19191   bottom_up
+     4       19191             11840        4662   bottom_up
+     5        4662              6820         696   bottom_up
+     6         696               877         108    top_down
+     7         108               113          13    top_down
+     8          13                26           6    top_down
+     9           6                 2           0    top_down
+
+Results appended to results/ours_all_graphs.csv

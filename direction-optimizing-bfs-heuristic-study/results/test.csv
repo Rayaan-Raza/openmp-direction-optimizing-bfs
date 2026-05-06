@@ -1,0 +1,2 @@
+graph_name,graph_family,directed,source,mode,threads,alpha,beta,runtime_seconds,total_visited,total_levels,total_edge_examinations,switch_to_bottom_up_level,switch_back_to_top_down_level,top_down_levels,bottom_up_levels,frontier_at_switch,visited_fraction_at_switch,speedup,efficiency
+branching,synthetic,0,0,hybrid_omp,2,6.0,24.0,0.000220194,6,4,7,1,4,1,3,2,0.500000,0.0133,0.0066

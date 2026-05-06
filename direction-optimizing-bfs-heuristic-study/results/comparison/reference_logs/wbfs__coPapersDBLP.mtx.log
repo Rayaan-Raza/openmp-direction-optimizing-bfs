@@ -1,0 +1,6 @@
+Sources: 237097 
+Threads: 1	Level: 14	Delta: 0	Time: 0.0821753
+Threads: 2	Level: 14	Delta: 0	Time: 0.0574703
+Threads: 4	Level: 14	Delta: 0	Time: 0.0469949
+Threads: 8	Level: 14	Delta: 0	Time: 0.0294111
+Threads: 16	Level: 14	Delta: 0	Time: 0.022873

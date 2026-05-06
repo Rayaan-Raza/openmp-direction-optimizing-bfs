@@ -1,0 +1,40 @@
+=== Graph: coPapersDBLP ===
+  Vertices:  540486
+  Edges:     30491458 (undirected, stored both dirs)
+  Avg degree: 56.4149
+  Min degree: 1
+  Max degree: 3299
+
+Running BFS mode: hybrid_omp | source=0 | threads=2
+  alpha=8 beta=48
+--- Run Metrics ---
+  Runtime:              0.050573 s
+  CPU time:             0.108937 s
+  Visited:              540486
+  Levels:               15
+  Edge examinations:    15356630
+  Top-down levels:      10
+  Bottom-up levels:     5
+  Switch to BU at lvl:  4
+  Frontier at switch:   32337
+  Visited frac at sw:   0.0632
+  Switch back TD lvl:   9
+--- Per-Level Metrics ---
+ Level    Frontier         EdgeExams  NewVisited        Mode
+     0           1                19          19    top_down
+     1          19               464          92    top_down
+     2          92              4098        1718    top_down
+     3        1718            239617       32337    top_down
+     4       32337          12208860      176764   bottom_up
+     5      176764           2353066      215658   bottom_up
+     6      215658            409228       85296   bottom_up
+     7       85296             84184       21775   bottom_up
+     8       21775             19092        5137   bottom_up
+     9        5137             28799        1232    top_down
+    10        1232              6476         325    top_down
+    11         325              1923          92    top_down
+    12          92               421          33    top_down
+    13          33               368           7    top_down
+    14           7                15           0    top_down
+
+Results appended to results/ours_all_graphs.csv

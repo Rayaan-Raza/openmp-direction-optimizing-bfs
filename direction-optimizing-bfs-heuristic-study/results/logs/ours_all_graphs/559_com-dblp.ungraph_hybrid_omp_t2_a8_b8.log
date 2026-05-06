@@ -1,0 +1,40 @@
+=== Graph: com-dblp.ungraph ===
+  Vertices:  425957
+  Edges:     2099732 (undirected, stored both dirs)
+  Avg degree: 4.92945
+  Min degree: 0
+  Max degree: 343
+
+Running BFS mode: hybrid_omp | source=0 | threads=2
+  alpha=8 beta=8
+--- Run Metrics ---
+  Runtime:              0.018403 s
+  CPU time:             0.040026 s
+  Visited:              317080
+  Levels:               15
+  Edge examinations:    1527826
+  Top-down levels:      11
+  Bottom-up levels:     4
+  Switch to BU at lvl:  4
+  Frontier at switch:   29108
+  Visited frac at sw:   0.0780
+  Switch back TD lvl:   8
+--- Per-Level Metrics ---
+ Level    Frontier         EdgeExams  NewVisited        Mode
+     0           1                16          16    top_down
+     1          16               388         299    top_down
+     2         299              6917        3801    top_down
+     3        3801             80302       29108    top_down
+     4       29108            908230      107191   bottom_up
+     5      107191            353083      115844   bottom_up
+     6      115844            105374       45195   bottom_up
+     7       45195             27218       11787   bottom_up
+     8       11787             35067        2936    top_down
+     9        2936              8435         638    top_down
+    10         638              1945         177    top_down
+    11         177               629          73    top_down
+    12          73               192          12    top_down
+    13          12                28           2    top_down
+    14           2                 2           0    top_down
+
+Results appended to results/ours_all_graphs.csv

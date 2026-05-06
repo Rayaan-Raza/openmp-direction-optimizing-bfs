@@ -1,0 +1,30 @@
+=== Graph: soc-Epinions1 ===
+  Vertices:  75888
+  Edges:     508837 (directed)
+  Avg degree: 6.7051
+  Min degree: 0
+  Max degree: 1801
+
+Running BFS mode: topdown_omp | source=0 | threads=1
+--- Run Metrics ---
+  Runtime:              0.001890 s
+  CPU time:             0.002071 s
+  Visited:              47676
+  Levels:               10
+  Edge examinations:    467468
+  Top-down levels:      10
+  Bottom-up levels:     0
+--- Per-Level Metrics ---
+ Level    Frontier         EdgeExams  NewVisited        Mode
+     0           1               139         139    top_down
+     1         139             17453        3634    top_down
+     2        3634            202637       19226    top_down
+     3       19226            199693       19191    top_down
+     4       19191             40713        4662    top_down
+     5        4662              5815         696    top_down
+     6         696               877         108    top_down
+     7         108               113          13    top_down
+     8          13                26           6    top_down
+     9           6                 2           0    top_down
+
+Results appended to results/ours_all_graphs.csv

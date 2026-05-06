@@ -1,0 +1,10 @@
+Vertices: 1791489
+Edges: 28508141
+Avg degree: 15.9131
+Min & max degrees: 1 & 3907
+Sources: 284819 
+Threads: 1	Level: 254	Delta: 0	Time: 0.302691
+Threads: 2	Level: 254	Delta: 0	Time: 0.156357
+Threads: 4	Level: 254	Delta: 0	Time: 0.0975243
+Threads: 8	Level: 254	Delta: 0	Time: 0.112106
+Threads: 16	Level: 254	Delta: 0	Time: 0.415987
