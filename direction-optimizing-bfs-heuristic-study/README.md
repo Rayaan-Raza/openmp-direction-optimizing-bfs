@@ -1,0 +1,218 @@
+# Direction-Optimizing BFS Heuristic Study
+
+## Problem Statement
+
+How do switching parameters alpha and beta affect the performance of hybrid
+direction-optimizing BFS across different graph families and under directed
+versus undirected graph semantics on a shared-memory OpenMP CPU implementation?
+
+## Contribution
+
+We implement sequential BFS, parallel top-down BFS, and parallel hybrid
+direction-optimizing BFS in OpenMP, and experimentally study how alpha, beta,
+graph family, and directedness influence runtime, speedup, edge examinations,
+and switch behavior.
+
+## Graph Semantics
+
+- **Undirected** (`--directed=0`): each input edge `(u,v)` is stored as both
+  `(u,v)` and `(v,u)`. Forward and reverse CSR are identical.
+- **Directed** (`--directed=1`): edges are kept as given. A separate reverse
+  CSR is built in-memory for the hybrid bottom-up step.
+
+## Building
+
+Requires `g++` with C++17 and OpenMP support.
+
+```bash
+make          # builds ./bfs
+make clean    # removes build artifacts
+```
+
+## Running
+
+```bash
+# Sequential BFS on a small test graph
+./bfs data/chain.txt --source=0 --directed=0 --mode=seq
+
+# Parallel top-down BFS with 8 threads
+./bfs data/branching.txt --source=0 --directed=0 --mode=topdown_omp --threads=8
+
+# Hybrid direction-optimizing BFS with custom alpha/beta
+./bfs data/directed_small.txt --source=0 --directed=1 --mode=hybrid_omp \
+    --threads=8 --alpha=14 --beta=24
+
+# Verify parallel result against sequential oracle
+./bfs data/chain.txt --source=0 --mode=topdown_omp --threads=4 --verify
+
+# Append results to CSV
+./bfs graph.txt --source=0 --mode=hybrid_omp --threads=8 \
+    --csv=results/out.csv --name=mygraph --family=social
+```
+
+## CLI Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `--source=N` | 0 | BFS source vertex |
+| `--directed=0\|1` | 0 | Directed graph semantics |
+| `--mode=MODE` | seq | `seq`, `topdown_omp`, or `hybrid_omp` |
+| `--threads=N` | 1 | OpenMP thread count |
+| `--alpha=F` | 14.0 | Hybrid top-down to bottom-up switch threshold |
+| `--beta=F` | 24.0 | Hybrid bottom-up to top-down switch-back threshold |
+| `--csv=PATH` | | Append CSV results to this file |
+| `--name=STR` | filename | Graph name for CSV |
+| `--family=STR` | unknown | Graph family for CSV |
+| `--verify` | | Compare result levels against sequential BFS |
+
+Run output now includes both:
+- `runtime_seconds` (wall-clock elapsed time)
+- `cpu_time_seconds` (process CPU time)
+
+## Correctness Tests
+
+```bash
+make test          # sequential BFS on tiny graphs
+make test-omp      # parallel top-down vs sequential
+make test-hybrid   # hybrid vs sequential
+make test-all      # all of the above
+```
+
+## Run All Reference Graphs
+
+```bash
+make run-graphs
+```
+
+This runs your implementation on all files under
+`../Parallel-Breadth-First-Search-OpenMP-and-CUDA/Graphs/` and writes:
+
+- `results/ours_all_graphs.csv`
+
+By default this now sweeps hybrid parameter combinations:
+- alpha: `4,6,8,10,12,14,16,20`
+- beta: `8,16,24,32,48,64`
+
+Faster option for large graphs:
+
+```bash
+make run-graphs-fast
+```
+
+`run-graphs-fast` uses fewer thread counts and skips sequential on the largest
+graphs to reduce runtime.
+
+Debug/verbose option:
+
+```bash
+make run-graphs-debug
+```
+
+This streams command output live and also writes per-run logs in
+`results/logs/ours_all_graphs/`.
+
+## Compare Against Reference Repo
+
+```bash
+make compare-all
+```
+
+This builds/runs both repositories and writes:
+
+- `results/comparison/ours.csv`
+- `results/comparison/reference_logs/*.log`
+- `results/comparison/combined_runtime_summary.csv`
+
+`compare-all` also includes alpha/beta sweep runs for your hybrid mode, and
+prints alpha/beta in progress logs so you can observe parameter behavior.
+
+Faster comparison option:
+
+```bash
+make compare-fast
+```
+
+`compare-fast` skips `wiki-topcats` in the reference run and uses fast mode for
+your implementation.
+
+Debug/verbose option:
+
+```bash
+make compare-debug
+```
+
+This prints detailed progress with timestamps and keeps reference logs in
+`results/comparison/reference_logs/`.
+
+## Results Folder Guide
+
+The `results/` directory contains both raw run outputs and aggregated
+comparison artifacts.
+
+### `results/` top-level files
+
+- `results/ours_all_graphs.csv`
+  - Main output from `make run-graphs` / `make compare-all`.
+  - Contains your implementation runs across reference graphs.
+  - Includes mode, threads, alpha, beta, runtime, CPU time, edge examinations,
+    levels, switch behavior, speedup, and efficiency.
+- `results/sweep_results.csv` (if you run `scripts/run_sweep.sh`)
+  - Parameter sweep data for your configured graph list in that script.
+- `results/cpu_*.csv`, `results/test.csv`, etc.
+  - Ad-hoc or debugging CSV files from manual test commands.
+  - Useful for sanity checks; not necessarily part of the final paper dataset.
+
+### `results/logs/ours_all_graphs/`
+
+- Per-run logs generated by run scripts.
+- Filenames encode run id, graph, mode, threads, and for hybrid also alpha/beta.
+- Use these to debug long runs, failures, or unexpected performance.
+
+### `results/comparison/`
+
+This folder is generated by `make compare-all` / `make compare-fast`.
+
+- `results/comparison/ours.csv`
+  - Copy of your generated comparison CSV for the same run.
+  - Best source for analyzing your own algorithm behavior and alpha/beta effects.
+- `results/comparison/reference_logs/`
+  - Raw logs from the reference repo binaries (`wbfs`, `qbfs`, `hybrid`).
+  - Each file is one executable + one graph:
+    - `wbfs__<graph>.log`
+    - `qbfs__<graph>.log`
+    - `hybrid__<graph>.log`
+  - Contains reference timing lines (`Threads`, `Level`, `Delta`, `Time`).
+- `results/comparison/combined_runtime_summary.csv`
+  - Merged view combining:
+    - reference timings parsed from reference logs
+    - your rows from `ours.csv`
+  - Useful for one-table side-by-side comparisons in the report.
+
+### Which file to use for paper/report
+
+- **Primary analysis (your study + alpha/beta relationship):**
+  - `results/ours_all_graphs.csv` (or `results/comparison/ours.csv`)
+- **Reference baseline evidence:**
+  - `results/comparison/reference_logs/*.log`
+- **Quick side-by-side comparison table:**
+  - `results/comparison/combined_runtime_summary.csv`
+
+### Recommended workflow for final report
+
+1. Run `make compare-all` (or `make compare-fast` for quick draft).
+2. Use `results/comparison/ours.csv` for plots and alpha/beta heatmaps.
+3. Use `results/comparison/combined_runtime_summary.csv` for baseline tables.
+4. Keep `results/comparison/reference_logs/` as reproducibility evidence.
+
+## Input Format
+
+- **Edge list**: one `u v` pair per line (`#`/`%` comments skipped), 0-based IDs.
+- **Matrix Market `.mtx`**: loader skips the size line and converts 1-based IDs
+  to 0-based automatically.
+
+## BFS Variants
+
+1. **Sequential top-down**: standard queue-based BFS (correctness oracle)
+2. **Parallel top-down (OpenMP)**: per-thread local frontiers with prefix-sum merge
+3. **Hybrid direction-optimizing (OpenMP)**: switches between top-down and
+   bottom-up based on alpha/beta heuristic from Beamer et al.

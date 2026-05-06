@@ -1,0 +1,8 @@
+# Small directed graph
+# Directed from source 0: reachable = {0,1,2,3,4}, levels = {0:0, 1:1, 2:2, 3:3, 4:1}
+# Undirected from source 0: all reachable, potentially different levels
+0 1
+1 2
+2 3
+0 4
+4 3
